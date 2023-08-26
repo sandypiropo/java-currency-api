@@ -1,5 +1,9 @@
 package projectapi;
 
+// Importação das classes necessárias para trabalhar
+// com requisições HTTP usando o java.net.http.HttpClient
+// que é a API de cliente HTTP introduzida no Java 11.
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,23 +15,19 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Map;
 
-// importa as classes necessárias para trabalhar
-// com requisições HTTP usando o java.net.http.HttpClient
-// que é a API de cliente HTTP introduzida no Java 11.
-
 public class CurrencyApi {
     public static void main(String[] args) {
 
-//      Criando uma requisição HTTP GET para a URL
+//      Criação de uma requisição HTTP GET para a URL da API de câmbio
         HttpRequest request = HttpRequest.newBuilder()
 //              O HttpRequest.newBuilder() constroi a requisição
                 .GET()
-//              É definido o método HTTP como GET com .GET()
+//              Define o método HTTP
                 .uri(URI.create("http://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL"))
                 .timeout(Duration.ofSeconds(10))
-//              Se a aplicação não retornar em 3 segundos, é passado o erro
+//              Passa um erro se a aplicação não retornar em 10 segundos
                 .build();
-//              A chamada .build() finaliza a construção da requisição.
+//              Chamada que finaliza a construção da requisição
 
         HttpClient httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
@@ -37,23 +37,23 @@ public class CurrencyApi {
                 .build();
 
         try {
-//          httpClient.send() retorna uma instância de HttpResponse que contém a resposta da requisição.
+//          Envio da requisição e obtenção da resposta
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
             ObjectMapper objectMapper = new ObjectMapper();
 
+//          Configuração do ObjectMapper para ignorar propriedades desconhecidas no JSON
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//          Não lançará uma exceção se encontrar campos no JSON que não correspondam
-//          aos campos na classe CurrencyInfo
 
+//          Desserialização do JSON em um Map de moedas para informações
             Map<String, CurrencyInfo> currencyInfoMap = objectMapper.readValue(responseBody, new TypeReference<Map<String, CurrencyInfo>>() {});
 
+//          Iteração sobre o mapa de moedas e exibição das informações
             for (Map.Entry<String, CurrencyInfo> entry : currencyInfoMap.entrySet()) {
                 String currencyCode = entry.getKey();
                 CurrencyInfo currencyInfo = entry.getValue();
-//              Variáveis usadas para armazenar temporariamente os valores da chave e do
-//              valor de cada entrada
+//              Armazenar temporariamente os valores chave-valor de cada entrada
 
                 System.out.println("Currency Code: " + currencyCode);
                 System.out.println("Bid Value: " + currencyInfo.getBid());
@@ -61,22 +61,13 @@ public class CurrencyApi {
                 System.out.println();
             }
 
-//            for (CurrencyInfo currencyInfo : currencyInfoList) {
-//                System.out.println("Currency Code: " + currencyInfo.getCode());
-//                System.out.println("Bid Value: " + currencyInfo.getBid());
-//                System.out.println("Create Date: " + currencyInfo.getCreateDate());
-//                System.out.println();  // Adicione uma linha em branco para separar as informações de cada moeda
-//
-//            }
-
+//          Exibição do status code da resposta
             System.out.println("Status Code: " + response.statusCode());
         } catch (Exception e) {
             e.printStackTrace();
-//          Se algo der errado, o e.printStackTrace()
-//          imprimirá a pilha de erros no console para ajudar na depuraç            ão
+//          Impressão da pilha de erros em caso de exceção
+
         }
-
-
-//              Esta API não suporta xml -> .headers("Accept", "applicarion/xml")
+//Obs: Esta API não suporta xml, se suportasse poderia ter usado-> .headers("Accept", "applicarion/xml")
     }
 }
