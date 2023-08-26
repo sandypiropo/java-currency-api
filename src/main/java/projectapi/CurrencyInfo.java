@@ -23,15 +23,4 @@ public class CurrencyInfo {
         return createDate;
     }
 
-//    public void setCreateDate(String createDate) {
-//        this.createDate = createDate;
-//    }
-//
-//    public class CurrencyApiResponse {
-//        private List<CurrencyInfo> currencies;
-//
-//        public List<CurrencyInfo> getCurrencies() {
-//            return currencies;
-//        }
-//    }
 }
