@@ -57,8 +57,7 @@ public class CurrencyApi {
 
                 System.out.println("Currency Code: " + currencyCode);
                 System.out.println("Bid Value: " + currencyInfo.getBid());
-                System.out.println("Create Date: " + currencyInfo.getCreateDate());
-                System.out.println();
+                System.out.println("Create Date: " + currencyInfo.getCreateDate() + "\n");
             }
 
 //          Exibição do status code da resposta
