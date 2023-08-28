@@ -67,6 +67,5 @@ public class CurrencyApi {
 //          Impressão da pilha de erros em caso de exceção
 
         }
-//Obs: Esta API não suporta xml, se suportasse poderia ter usado-> .headers("Accept", "applicarion/xml")
     }
 }
